@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Building2,
   Lock,
@@ -245,7 +245,7 @@ export function Login() {
         {/* Left Hero / Brand & Mission Column */}
         <section className="login-hero">
           <div className="login-hero-header">
-            <Link to="/" className="brand login-brand" style={{ textDecoration: 'none' }}>
+            <div className="brand login-brand">
               <span className="brand-mark">
                 <Building2 size={24} />
               </span>
@@ -253,15 +253,8 @@ export function Login() {
                 <b>ThermaCity</b>
                 <small>Urban Climate Intelligence</small>
               </div>
-            </Link>
+            </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <Link
-                to="/"
-                className="text-link"
-                style={{ color: '#a6cfc3', fontSize: '11px', textDecoration: 'none' }}
-              >
-                ← Public View
-              </Link>
               <span className="pill live">
                 <i />
                 SYSTEMS ACTIVE

@@ -78,6 +78,12 @@ export function Layout() {
     navigate('/login');
   };
 
+  const handleSwitchRole = () => {
+    logout();
+    setProfileOpen(false);
+    navigate('/login');
+  };
+
   return (
     <div className="app-shell">
       <aside className={open ? 'sidebar open' : 'sidebar'}>
@@ -274,14 +280,14 @@ export function Layout() {
                         </div>
                       </div>
                       <div className="profile-actions">
-                        <Link
-                          to="/login"
+                        <button
+                          type="button"
                           className="profile-link-btn"
-                          onClick={() => setProfileOpen(false)}
+                          onClick={handleSwitchRole}
                         >
                           <User size={15} />
                           <span>Switch Role / Portal Login</span>
-                        </Link>
+                        </button>
                         <button
                           className="profile-signout-btn"
                           onClick={handleSignOut}

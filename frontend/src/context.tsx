@@ -21,7 +21,7 @@ type AppContextValue = {
 
 const AppContext = createContext<AppContextValue>({
   notify: () => undefined,
-  user: DEFAULT_USER,
+  user: null,
   login: () => undefined,
   logout: () => undefined
 });
@@ -33,9 +33,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserProfile | null>(() => {
     try {
       const stored = localStorage.getItem('thermacity-user');
-      return stored ? (JSON.parse(stored) as UserProfile) : DEFAULT_USER;
+      return stored ? (JSON.parse(stored) as UserProfile) : null;
     } catch {
-      return DEFAULT_USER;
+      return null;
     }
   });
 
