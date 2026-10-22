@@ -2,7 +2,10 @@
   "name": "urban-heat-monitoring-platform",
   "private": true,
   "version": "1.0.0",
-  "workspaces": ["apps/*"],
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
   "scripts": {
     "dev": "concurrently -n API,WEB -c cyan,green \"npm run dev -w @urban-heat/api\" \"npm run dev -w @urban-heat/web\"",
     "build": "npm run build -w @urban-heat/api && npm run build -w @urban-heat/web",
@@ -11,6 +14,10 @@
     "db:migrate": "npm run db:migrate -w @urban-heat/api",
     "db:seed": "npm run db:seed -w @urban-heat/api"
   },
-  "devDependencies": { "concurrently": "^9.1.2" },
-  "engines": { "node": ">=20" }
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
 }
