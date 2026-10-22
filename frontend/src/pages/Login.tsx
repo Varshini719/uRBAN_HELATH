@@ -16,7 +16,8 @@ import {
   Sparkles,
   User,
   Briefcase,
-  UserCheck
+  UserCheck,
+  KeyRound
 } from 'lucide-react';
 import { useApp } from '../context';
 import { Modal } from '../components/Modal';
@@ -91,6 +92,7 @@ export function Login() {
   const [regEmail, setRegEmail] = useState('');
   const [regDept, setRegDept] = useState('Urban Planning Directorate');
   const [regRole, setRegRole] = useState('City Planner');
+  const [regPasscode, setRegPasscode] = useState('');
   const [regPassword, setRegPassword] = useState('');
   const [regConfirmPassword, setRegConfirmPassword] = useState('');
   const [regAgree, setRegAgree] = useState(true);
@@ -172,6 +174,21 @@ export function Login() {
       return;
     }
 
+    const isOfficerRole = !regRole.toLowerCase().includes('citizen') && !regRole.toLowerCase().includes('observer');
+    const VALID_OFFICER_PASSCODES = ['MUNI-2026', 'OFFICER-THERMA-2026', 'CLIMATE-2026'];
+
+    if (isOfficerRole) {
+      const cleanKey = regPasscode.trim().toUpperCase();
+      if (!cleanKey) {
+        notify('Officer designation requires a Municipal Authorization Key. (Passkey: MUNI-2026)', 'info');
+        return;
+      }
+      if (!VALID_OFFICER_PASSCODES.includes(cleanKey)) {
+        notify('Invalid Authorization Key! You cannot register as an Officer without a verified departmental key. Select Citizen Researcher for public access.', 'info');
+        return;
+      }
+    }
+
     setIsLoading(true);
 
     const initials = regName
@@ -190,7 +207,7 @@ export function Login() {
       role: regRole,
       department: regDept,
       avatarInitials: initials,
-      badge: 'Registered Officer'
+      badge: isOfficerRole ? 'Registered Officer' : 'Citizen Observer'
     };
 
     // Save in registered users list
@@ -209,7 +226,8 @@ export function Login() {
       email: regEmail.trim(),
       password: regPassword,
       department: regDept,
-      role: regRole
+      role: regRole,
+      passcode: regPasscode.trim().toUpperCase()
     }).catch(() => null);
 
     setTimeout(() => {
@@ -545,6 +563,7 @@ export function Login() {
                           <option>Field Sensor Operations</option>
                           <option>Disaster & Heat Mitigation</option>
                           <option>Civic Climate Research</option>
+                          <option>Independent Citizen / Community</option>
                         </select>
                       </div>
                     </div>
@@ -563,10 +582,41 @@ export function Login() {
                           <option>IoT Sensor Specialist</option>
                           <option>Environmental Officer</option>
                           <option>Municipal Administrator</option>
+                          <option>Citizen Researcher / Public Observer</option>
                         </select>
                       </div>
                     </div>
                   </div>
+
+                  {!regRole.toLowerCase().includes('citizen') && !regRole.toLowerCase().includes('observer') ? (
+                    <div className="form-group officer-key-group">
+                      <div className="label-with-link">
+                        <label htmlFor="reg-passcode">
+                          Department Authorization Key <span className="required-tag">*Required for Officers</span>
+                        </label>
+                        <span className="key-hint-badge">Issued by IT (Passkey: MUNI-2026)</span>
+                      </div>
+                      <div className="input-with-icon">
+                        <KeyRound size={17} className="input-icon" />
+                        <input
+                          id="reg-passcode"
+                          type="text"
+                          required
+                          value={regPasscode}
+                          onChange={(e) => setRegPasscode(e.target.value)}
+                          placeholder="Enter officer authorization key (e.g. MUNI-2026)"
+                        />
+                      </div>
+                      <small className="field-hint">
+                        Verified municipal passkey required to unlock officer privileges. Regular users can select 'Citizen Researcher'.
+                      </small>
+                    </div>
+                  ) : (
+                    <div className="officer-key-public">
+                      <ShieldCheck size={16} />
+                      <span>Public Citizen Profile: No authorization key required. Access granted in read-only observer mode.</span>
+                    </div>
+                  )}
 
                   <div className="form-group">
                     <label htmlFor="reg-password">Password (min. 6 characters)</label>

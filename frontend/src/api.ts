@@ -22,6 +22,6 @@ export const api = {
   stations: () => request<Station[]>('/stations'),
   initiatives: () => request<Initiative[]>('/initiatives'),
   login: (credentials: { email: string; password: string }) => post<AuthSession>('/auth/login', credentials),
-  register: (data: { name: string; email: string; password: string; department: string; role: string }) =>
+  register: (data: { name: string; email: string; password: string; department: string; role: string; passcode?: string }) =>
     post<AuthSession>('/auth/register', data)
 };

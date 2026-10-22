@@ -139,6 +139,14 @@
 .login-security-notice{margin-top:18px;display:flex;align-items:flex-start;gap:8px;font-size:9px;line-height:1.45;color:#849691;border-top:1px solid #ecf1ee;padding-top:14px}
 .login-security-notice svg{flex-shrink:0;color:#45997f;margin-top:1px}
 
+/* Officer Authorization Key Verification */
+.officer-key-group{background:#f0f8f4;border:1px solid #cce5da;padding:12px 14px;border-radius:10px;display:grid;gap:6px}
+.required-tag{font-size:10px;color:#c93b1d;font-weight:700;margin-left:4px}
+.key-hint-badge{font-size:9px;font-weight:700;color:#186851;background:#d7efe4;padding:2px 7px;border-radius:4px}
+.field-hint{font-size:10px;color:#607972;line-height:1.4}
+.officer-key-public{background:#f6f9f7;border:1px dashed #cedbd5;padding:10px 12px;border-radius:9px;font-size:11px;color:#3d5b52;display:flex;align-items:center;gap:8px}
+.officer-key-public svg{color:#2e8469;flex-shrink:0}
+
 /* Forgot Credentials Modal Details */
 .forgot-modal-content{text-align:center;padding:10px 0}
 .forgot-icon-wrap{width:56px;height:56px;border-radius:50%;background:#eaf5f0;color:#1c725a;display:grid;place-items:center;margin:0 auto 14px}

@@ -39,12 +39,15 @@ router.post('/login', (req, res) => {
   });
 });
 
+const VALID_OFFICER_PASSCODES = ['MUNI-2026', 'OFFICER-THERMA-2026', 'CLIMATE-2026'];
+
 const registerSchema = z.object({
   name: z.string().min(2).max(100),
   email: z.string().email(),
   password: z.string().min(6),
   department: z.string().min(2).max(120),
-  role: z.string().min(2).max(80)
+  role: z.string().min(2).max(80),
+  passcode: z.string().optional()
 });
 
 router.post('/register', (req, res) => {
@@ -53,7 +56,19 @@ router.post('/register', (req, res) => {
     return res.status(400).json({ error: 'Validation failed', details: result.error.flatten() });
   }
 
-  const { name, email, department, role } = result.data;
+  const { name, email, department, role, passcode } = result.data;
+  const isPublicRole = role.toLowerCase().includes('citizen') || role.toLowerCase().includes('observer');
+
+  // Verify departmental authorization key for officer designations
+  if (!isPublicRole) {
+    const cleanKey = passcode?.trim().toUpperCase();
+    if (!cleanKey || !VALID_OFFICER_PASSCODES.includes(cleanKey)) {
+      return res.status(403).json({
+        error: 'Invalid Municipal Authorization Key. Official officer registrations require a verified departmental key (e.g. MUNI-2026).'
+      });
+    }
+  }
+
   const initials = name
     .split(' ')
     .map((w) => w[0])
@@ -69,7 +84,7 @@ router.post('/register', (req, res) => {
     role,
     department,
     avatarInitials: initials || 'UR',
-    badge: 'Registered Officer'
+    badge: isPublicRole ? 'Citizen Observer' : 'Registered Officer'
   };
 
   return res.status(201).json({
